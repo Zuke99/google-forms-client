@@ -1,12 +1,131 @@
-import React, { useState } from 'react'
+import React, {useState } from 'react'
 import Navbar from './Navbar'
 import FormHeading from './form-elements/FormHeading';
 import Questions from './form-elements/Questions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faT } from '@fortawesome/free-solid-svg-icons';
 
 
 function CreateForm() {
 
   const [activeNav, setActiveNav] = useState(0);
+
+  const [toolbarPosition, setToolbarPosition] = useState({ top: 0, left: 0 });
+  // const containerRef = useRef(null);
+  const [showToolbar, setShowToolbar] = useState(false);
+  
+
+  const [questionDivs, setQuestionDivs] = useState([]);
+
+  const handleHeadingClick = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+   // const toolbarWidth = 150; // Set the desired width for the toolbar
+    console.log("rect", rect);
+    const newPosition = {
+      top: rect.top - 65,
+      left: rect.right + 10,
+    };
+
+    // Adjust the position to ensure the toolbar is fully visible within the viewport
+    // if (newPosition.left + toolbarWidth > window.innerWidth) {
+    //   newPosition.left = rect.left - toolbarWidth;
+    // }
+
+    setToolbarPosition(newPosition);
+    setShowToolbar(true);
+  };
+  const [headingDivs, setHeadingDivs] = useState([
+    <div
+      key={`heading_0`}
+      className='mt-[1%] ml-[28%] w-[44%] min-h-fit cursor-pointer'
+      onClick={handleHeadingClick}
+    >
+      {<FormHeading/>}
+    </div>,
+  ]);
+
+  const handleQuestionClick = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const toolbarWidth = 150; // Set the desired width for the toolbar
+
+    const newPosition = {
+      top: rect.top + window.scrollY,
+      left: rect.right + 10,
+    };
+
+    // Adjust the position to ensure the toolbar is fully visible within the viewport
+    if (newPosition.left + toolbarWidth > window.innerWidth) {
+      newPosition.left = rect.left - toolbarWidth;
+    }
+
+    setToolbarPosition(newPosition);
+    setShowToolbar(true);
+  };
+
+  const addHeadingDiv = () => {
+    // Create a new unique key for each heading div
+    const newKey = `heading_${headingDivs.length + 1}`;
+    const newHeadingDiv = (
+      <div
+        key={newKey}
+        className='mt-[1%] ml-[28%] w-[44%] min-h-fit cursor-pointer'
+        onClick={handleHeadingClick}
+      >
+        {<FormHeading/>}
+      </div>
+    );
+    setHeadingDivs([...headingDivs, newHeadingDiv]);
+  };
+  const addQuestionDiv = () => {
+    // Create a new unique key for each question div
+    const newKey = `question_${questionDivs.length + 1}`;
+    const newQuestionDiv = (
+      <div
+        key={newKey}
+        className='my-[1%] ml-[28%] w-[44%] min-h-[30%] cursor-pointer'
+        onClick={handleQuestionClick}
+      >
+        {<Questions/>}
+      </div>
+    );
+    setQuestionDivs([...questionDivs, newQuestionDiv]);
+  };
+
+
+
+
+  // const handleDivClick = (event) => {
+  //   // Calculate the position relative to the clicked div
+  //   console.log("Div clicked")
+  //   const clickedDiv = event.currentTarget;
+  //   console.log("clicked div", clickedDiv);
+  //   const rect = clickedDiv.getBoundingClientRect();
+  //   console.log("rect", rect);
+  //   const toolbarWidth = 20;
+    
+  //   const newPosition = {
+  //     top: rect.top-80,
+  //     left: rect.right + 15,
+  //   };
+
+  //   if (newPosition.left + toolbarWidth > window.innerWidth) {
+  //     newPosition.left = window.innerWidth - toolbarWidth;
+  //   }
+  //   setToolbarPosition(newPosition);
+  //   setShowToolbar(true);
+  // }
+
+  // const addQuestionDiv = () => {
+  //   // Create a new unique key for each question div
+  //   const newKey = `question_${questionDivs.length + 1}`;
+  //   const newQuestionDiv = (
+  //     <div key={newKey} className='my-[1%] ml-[28%] w-[44%] min-h-[30%]' onClick={handleDivClick}>
+  //       {<Questions/>}
+  //     </div>
+  //   );
+  //   setQuestionDivs([...questionDivs, newQuestionDiv]);
+  // };
+
 
   const onNavigatorCLickHandler = (index) => {
     setActiveNav(index);
@@ -31,16 +150,45 @@ function CreateForm() {
       </div>
 
       {/* Body */}
-      <div className='flex-col w-[100%] min-h-[88.5%] bg-[#f0ebf8] justify-center items-center border'>
+      <div className='relative flex-col w-[100%] min-h-[88.5%] bg-[#f0ebf8] justify-center items-center border' >
 
-        <div className=' mt-[1%] ml-[28%] w-[44%] min-h-fit'>
+
+        {/* Heading Div  */}
+        {/* <div className=' mt-[1%] ml-[28%] w-[44%] min-h-fit' onClick={handleHeadingClick}>
           <FormHeading/>
-        </div>
-        <div className='my-[1%] ml-[28%] w-[44%] min-h-[30%]  '>
+        </div> */}
+
+        {/* Question div  */}
+        {/* <div className='my-[1%] ml-[28%] w-[44%] min-h-[30%]  ' onClick={handleDivClick}>
           <Questions/>
-          
-        </div> 
+        </div>  */}
+         {/* {questionDivs.map((questionDiv) => questionDiv)} */}
+
+         {headingDivs.map((headingDiv, index) => (
+          <div key={`heading_${index}`}>{headingDiv}</div>
+        ))}
+        {questionDivs.map((questionDiv, index) => (
+          <div key={`question_${index}`}>{questionDiv}</div>
+        ))}
+
+
+
+          {/* Toolbar Div  */}
+          {showToolbar && <div className={`absolute flex-col bg-white w-12 h-32 rounded-xl border transition-all duration-300 justify-center items-center
+           pt-5`} 
+           style={{ top: `${toolbarPosition.top}px`, left: `${toolbarPosition.left}px` }}
+           
+           > 
+
+           <FontAwesomeIcon className='my-2 font-bold text-xl' icon={faPlus} onClick={addQuestionDiv}/><br/>
+           <FontAwesomeIcon className='my-1 font-bold text-lg' icon={faT} onClick={addHeadingDiv} />
+
+           </div>}
+
+
       </div>  
+
+      
 
 
 
