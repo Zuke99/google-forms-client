@@ -12,7 +12,7 @@ function CreateForm() {
     setActiveNav(index);
   }
   return (
-    <div className=' h-screen w-screen'>
+    <div className=' h-screen w-[100%]'>
       <Navbar searchBar={false} title={false}/>
 
       {/* SubNavBar */}
@@ -31,7 +31,7 @@ function CreateForm() {
       </div>
 
       {/* Body */}
-      <div className='flex-col w-[100%] h-[88.5%] bg-[#f0ebf8] justify-center items-center border'>
+      <div className='flex-col w-[100%] min-h-[88.5%] bg-[#f0ebf8] justify-center items-center border'>
 
         <div className=' mt-[1%] ml-[28%] w-[44%] min-h-fit'>
           <FormHeading/>

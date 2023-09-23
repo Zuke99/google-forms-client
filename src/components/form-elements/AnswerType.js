@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 function AnswerType(props) {
     const [radioButtons, setRadioButtons] = useState(['Option 1']);
     const [counter, setCounter] = useState(1);
-    const [textValues, setTextValues] = useState(['']);
+    const [textValues, setTextValues] = useState(['Option 1']);
 
     const textOnChangeHandler = (index, newValue) => {
        const newTextValue = [...textValues];
@@ -19,14 +19,26 @@ function AnswerType(props) {
        
         if(index === radioButtons.length - 1){
       const newRadioButton = `Option ${counter + 1}`;
+
+      const newTextValue = [...textValues];
+          
       setCounter(counter + 1)
       setRadioButtons([...radioButtons, newRadioButton]);
+     
+      
+      setTextValues(newTextValue);
+
+      console.log(radioButtons);
+      console.log(textValues);
         }
     };
   
-    const removeRadioButton = (radioButton) => {
+    const removeRadioButton = (radioButton, index) => {
       const updatedRadioButtons = radioButtons.filter((rb) => rb !== radioButton);
       setRadioButtons(updatedRadioButtons);
+
+      const updateTextBox = textValues.filter((text) => text !== textValues[index]);
+      setTextValues(updateTextBox);
     };
     
   return (
@@ -42,11 +54,14 @@ function AnswerType(props) {
 
          {props.type !=='Dropdown' && <input type={props.type} name="radioGroup" id={radioButton} className="mr-2" />}
          {props.type === 'Dropdown' && <label className='mr-2 flex'>{index + 1}. </label>}
+
           <input value={textValues[index]} onChange={(e) => textOnChangeHandler(index, e.target.value)} placeholder={radioButton} onClick={()=> addRadioButton(index)}
           className='flex outline-none w-[80%] border-b border-white hover:border-b hover:border-slate-200'></input>
-          <button onClick={() => removeRadioButton(radioButton)} className="ml-2 px-2 py-1 ">
+          
+          
+         { <button onClick={() => removeRadioButton(radioButton, index)} className="ml-2 px-2 py-1 ">
             <FontAwesomeIcon icon={faXmark} />
-          </button>
+          </button> }
 
         </div>
       ))}

@@ -11,11 +11,11 @@ function Navbar(props) {
     }
 
     return (
-        <div className='flex items-center justify-between h-[7%]  '>
+        <div className='flex items-center justify-between h-[60px]  '>
             <div className='flex items-center w-[25%] '>
                 <img className='ml-5 h-[9%] w-[9%] ' src={formIcon} alt='gforms' />
                 {props.title && <p className='ml-3 font-normal text-2xl'>Forms</p>}
-                {!props.title && <input className='ml-3 text-lg font-normal max-w-[60%] h-[100%] border-none selection:border-b-8' type='text' value={formTitle} onChange={titleOnChangeHandler}></input>}
+                {!props.title && <input className='ml-3 text-lg font-normal max-w-[60%] h-[100%] outline-none border-none selection:border-b-8' type='text' value={formTitle} onChange={titleOnChangeHandler}></input>}
             </div>
 
             <div className='flex w-[50%] h-[80%] items-center'>
