@@ -102,7 +102,7 @@ function AnswerType(props) {
           
           
          {index!==textValues.length -1 &&  <button onClick={() => removeRadioButton(radioButton, index, textValues[index])} className="ml-2 px-2 py-1 ">
-            <FontAwesomeIcon icon={faXmark} />
+            <FontAwesomeIcon icon={faXmark}  className=' rounded-full px-4 py-3 hover:bg-slate-50'/>
           </button> }
 
         </div>
