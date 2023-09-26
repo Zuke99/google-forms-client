@@ -14,7 +14,10 @@ function CreateForm() {
 
   const [questionDivs, setQuestionDivs] = useState([]);
 
-  const [selectedDiv, setSelectedDiv] = useState();
+  const [example, setExample] = useState([]);
+  const[indd, setindd] = useState();
+
+  const [selectedDivIndex, setSelectedDivIndex] = useState(-1);
 
   const handleHeadingClick = (event) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -37,9 +40,16 @@ function CreateForm() {
       {<FormHeading />}
     </div>,
   ]);
+  // useEffect(() => {
+  //   console.log("alldivs",questionDivs)
+  // })
 
-  const handleQuestionClick = (event) => {
-    console.log("clicked Div")
+  const handleQuestionClick = (event, index) => {
+    
+    console.log("clickedDiv", event.currentTarget)
+    //Get the Div's index
+  
+
     const rect = event.currentTarget.getBoundingClientRect();
     const toolbarWidth = 150; // Set the desired width for the toolbar
 
@@ -66,31 +76,62 @@ function CreateForm() {
       <div
         key={newKey}
         className="mt-[1%] ml-[28%] w-[44%] min-h-fit "
-        onClick={() => handleHeadingClick}
+        onClick={ handleHeadingClick}
       >
         {<FormHeading />}
       </div>
     );
     setHeadingDivs([...headingDivs, newHeadingDiv]);
   };
+
+
+
+    
   const addQuestionDiv = () => {
-    // Create a new unique key for each question div
+  
     const newKey = `question_${questionDivs.length + 1}`;
-    const newQuestionDiv = (
-      <div
-        key={newKey}
-        className="my-[1%] ml-[28%] w-[44%] min-h-[30%] "
-        onClick={handleQuestionClick}
+    const newQuestionDivs = [...questionDivs];
+
+    let newDiv =( <div
+      key={newKey}
+      className="my-[1%] ml-[28%] w-[44%] min-h-[30%]"
+      onClick={handleQuestionClick}
       >
-        {<Questions />}
-      </div>
-    );
-    setQuestionDivs([...questionDivs, newQuestionDiv]);
+      {<Questions key={newKey+1}/>}
+      </div>);
+
+
+  newQuestionDivs.splice(selectedDivIndex + 1, 0, newDiv);
+
+
+  setQuestionDivs(newQuestionDivs);
+
   };
+  
+
+  const SetCurrentDivHandler = (index) => {
+    setSelectedDivIndex(index);
+  }
 
   const onNavigatorCLickHandler = (index) => {
     setActiveNav(index);
   };
+
+
+  const onChangesText = (e) =>{
+    setindd(e.target.value);
+  }
+ const onClickButton = () => {
+    const newExample = [...example]; // Create a shallow copy of the example array
+    
+    console.log("Index", indd);
+  
+    // Insert the new value at the specified index
+    newExample.splice(indd, 0, `option+ ${indd}`);
+    
+    setExample(newExample);
+    console.log("clicked", example);
+  }
   return (
     <div className=" h-screen w-[100%]">
       <Navbar searchBar={false} title={false} />
@@ -132,15 +173,23 @@ function CreateForm() {
         </ul>
       </div>
 
-      {/* Body */}
-      <div className="relative flex-col w-[100%] min-h-[88.5%] bg-[#f0ebf8] justify-center items-center border">
     
 
+      {/* Body */}
+      <div className="relative flex-col w-[100%] min-h-[88.5%] bg-[#f0ebf8] justify-center items-center border">
+      <input className="bg-slate-100" onChange={onChangesText}></input>
+      <button onClick={onClickButton}>Add </button>
+
+              {example.map((example, index) => (
+                  <div key={`some ${index}`}>{example}</div>
+                ))}
+
+
         {headingDivs.map((headingDiv, index) => (
-          <div key={`heading_${index}`}>{headingDiv}</div>
+          <div key={`heading_${index}`} >{headingDiv}</div>
         ))}
         {questionDivs.map((questionDiv, index) => (
-          <div key={`question_${index}`} >{questionDiv}</div>
+          <div key={`question_${index}`}  onClick={()=> SetCurrentDivHandler(index)}>{questionDiv}</div>
         ))}
 
         {/* Toolbar Div  */}
@@ -172,3 +221,69 @@ function CreateForm() {
 }
 
 export default CreateForm;
+
+
+// const addQuestionDiv = () => {
+//   console.log("inside fuunction")
+//   const newKey = `question_${questionDivs.length + 1}`;
+//   const newQuestionDivs = [...questionDivs];
+
+//   let copyDivs = [];
+
+//   for(let i = 0;i<= selectedDivIndex ; i++){
+//     console.log("present befrloop questiondiv", questionDivs[i]);
+//     copyDivs[i] = questionDivs[i];
+//   }
+
+//   let newDiv =( <div
+//     key={newKey}
+//     className="my-[1%] ml-[28%] w-[44%] min-h-[30%]"
+//     onClick={handleQuestionClick}
+//     >
+//     {<Questions key={newKey+1}/>}
+//     {/* <input className="bg-slate-100"></input> */}
+//     </div>);
+// copyDivs[selectedDivIndex+1]= newDiv;
+
+// //console.log("CopyDiv",copyDivs);
+
+// for(let i = selectedDivIndex + 1; i<questionDivs.length ;i++){
+//   console.log("present afterloop questiondiv", questionDivs[i]);
+//   copyDivs[i+1] = questionDivs[i];
+
+// }
+
+
+//  const swapDivs = [...questionDivs];
+// //setQuestionDivs([...questionDivs,newDiv]);
+// swapDivs.splice(selectedDivIndex + 1, 1, newDiv);
+
+
+
+
+
+
+// // const tempDiv = swapDivs[swapDivs.length-1];
+// // for(let i = swapDivs.length-1;i>selectedDivIndex+1;i--){
+// //     swapDivs[i] = swapDivs[i-1];
+// // }
+// // swapDivs[selectedDivIndex+1] = tempDiv;
+
+
+// setQuestionDivs(swapDivs);
+
+
+
+  
+//   newQuestionDivs.splice(selectedDivIndex + 1, 0, (
+//     <div
+//       key={newKey}
+//       className="my-[1%] ml-[28%] w-[44%] min-h-[30%]"
+//       onClick={handleQuestionClick}
+//     >
+//       {<Questions key={newKey}/>}
+//     </div>
+//   ));
+
+//  //setQuestionDivs(newQuestionDivs);
+// };
