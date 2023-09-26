@@ -4,6 +4,7 @@ import FormHeading from "./form-elements/FormHeading";
 import Questions from "./form-elements/Questions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faT } from "@fortawesome/free-solid-svg-icons";
+import {v4 as uuidv4} from 'uuid';
 
 function CreateForm() {
   const [activeNav, setActiveNav] = useState(0);
@@ -14,8 +15,7 @@ function CreateForm() {
 
   const [questionDivs, setQuestionDivs] = useState([]);
 
-  const [example, setExample] = useState([]);
-  const[indd, setindd] = useState();
+
 
   const [selectedDivIndex, setSelectedDivIndex] = useState(-1);
 
@@ -34,7 +34,7 @@ function CreateForm() {
   const [headingDivs, setHeadingDivs] = useState([
     <div
       key={`heading_0`}
-      className="mt-[1%] ml-[28%] w-[44%] min-h-fit cursor-pointer"
+      className="  w-[100%] min-h-fit cursor-pointer"
       onClick={handleHeadingClick}
     >
       {<FormHeading />}
@@ -67,6 +67,7 @@ function CreateForm() {
 
     setToolbarPosition(newPosition);
     setShowToolbar(true);
+    SetCurrentDivHandler(index);
   };
 
   const addHeadingDiv = () => {
@@ -75,7 +76,7 @@ function CreateForm() {
     const newHeadingDiv = (
       <div
         key={newKey}
-        className="mt-[1%] ml-[28%] w-[44%] min-h-fit "
+        className="mt-[1%] ml-[100%] w-[100%] min-h-fit "
         onClick={ handleHeadingClick}
       >
         {<FormHeading />}
@@ -89,28 +90,50 @@ function CreateForm() {
     
   const addQuestionDiv = () => {
   
-    const newKey = `question_${questionDivs.length + 1}`;
+    //const newKey = `question_${questionDivs.length + 1}`;
+    const newKey = uuidv4();
     const newQuestionDivs = [...questionDivs];
 
     let newDiv =( <div
       key={newKey}
-      className="my-[1%] ml-[28%] w-[44%] min-h-[30%]"
+      className="my-[1%] ml-[100%%] w-[100%] min-h-[30%]"
       onClick={handleQuestionClick}
       >
-      {<Questions key={newKey+1}/>}
+      {<Questions />}
       </div>);
 
 
-  newQuestionDivs.splice(selectedDivIndex + 1, 0, newDiv);
+  newQuestionDivs.splice(selectedDivIndex + 1, 0, newKey);
 
 
   setQuestionDivs(newQuestionDivs);
 
   };
+  // const addQuestionDiv = () => {  
+  //   const newKey = `question_${questionDivs.length + 1}`;
+
+  //   let newDiv =( <div
+      
+  //     className="my-[1%] ml-[28%] w-[44%] min-h-[30%]"
+  //     onClick={handleQuestionClick}
+  //     >
+  //     {<Questions />}
+  //     </div>);
+
+  //     const updateQuestionDiv = [
+  //           ...questionDivs.slice(0,selectedDivIndex+1), 
+  //           newDiv,
+  //           ...questionDivs.slice(selectedDivIndex+1)
+  //     ]
+
+  //     setQuestionDivs(updateQuestionDiv);
+
+  // };
   
 
   const SetCurrentDivHandler = (index) => {
     setSelectedDivIndex(index);
+    
   }
 
   const onNavigatorCLickHandler = (index) => {
@@ -118,20 +141,7 @@ function CreateForm() {
   };
 
 
-  const onChangesText = (e) =>{
-    setindd(e.target.value);
-  }
- const onClickButton = () => {
-    const newExample = [...example]; // Create a shallow copy of the example array
-    
-    console.log("Index", indd);
-  
-    // Insert the new value at the specified index
-    newExample.splice(indd, 0, `option+ ${indd}`);
-    
-    setExample(newExample);
-    console.log("clicked", example);
-  }
+
   return (
     <div className=" h-screen w-[100%]">
       <Navbar searchBar={false} title={false} />
@@ -176,21 +186,25 @@ function CreateForm() {
     
 
       {/* Body */}
-      <div className="relative flex-col w-[100%] min-h-[88.5%] bg-[#f0ebf8] justify-center items-center border">
-      <input className="bg-slate-100" onChange={onChangesText}></input>
-      <button onClick={onClickButton}>Add </button>
+      <div className="relative flex-col w-[100%] min-h-[88.5%] bg-[#f0ebf8]  border">
 
-              {example.map((example, index) => (
-                  <div key={`some ${index}`}>{example}</div>
-                ))}
+      <div className="w-[100%] ">
+    
 
-
+          <div className=" w-[100%] mt-5 mb-2  justify-center flex flex-col items-center">
         {headingDivs.map((headingDiv, index) => (
-          <div key={`heading_${index}`} >{headingDiv}</div>
+          <div className="w-[40%]" key={`heading_${index}`} >{headingDiv}</div>
         ))}
-        {questionDivs.map((questionDiv, index) => (
-          <div key={`question_${index}`}  onClick={()=> SetCurrentDivHandler(index)}>{questionDiv}</div>
-        ))}
+        </div>
+       
+       <div className="w-[100%] flex flex-col items-center justify-center" >
+       {questionDivs.map((questionId, index) => (
+        <div className="w-[40%] my-2" key={questionId} onClick={(event) => handleQuestionClick(event, index)}>
+          {<Questions />}
+        </div>
+      ))}
+      </div>
+  
 
         {/* Toolbar Div  */}
         {showToolbar && (
@@ -215,6 +229,7 @@ function CreateForm() {
             />
           </div>
         )}
+        </div>
       </div>
     </div>
   );
