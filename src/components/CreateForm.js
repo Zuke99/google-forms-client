@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import FormHeading from "./form-elements/FormHeading";
 import Questions from "./form-elements/Questions";
@@ -40,9 +40,9 @@ function CreateForm() {
       {<FormHeading />}
     </div>,
   ]);
-  // useEffect(() => {
-  //   console.log("alldivs",questionDivs)
-  // })
+  useEffect(() => {
+    console.log("alldivs",questionDivs)
+  })
 
   const handleQuestionClick = (event, index) => {
     
@@ -94,19 +94,19 @@ function CreateForm() {
     const newKey = uuidv4();
     const newQuestionDivs = [...questionDivs];
 
-    let newDiv =( <div
+    let newDiv =(<div
       key={newKey}
-      className="my-[1%] ml-[100%%] w-[100%] min-h-[30%]"
+      className="my-[1%] w-[100%] min-h-[30%]"
       onClick={handleQuestionClick}
       >
       {<Questions />}
       </div>);
 
 
-  newQuestionDivs.splice(selectedDivIndex + 1, 0, newKey);
+    newQuestionDivs.splice(selectedDivIndex + 1, 0, newKey);
 
 
-  setQuestionDivs(newQuestionDivs);
+    setQuestionDivs(newQuestionDivs);
 
   };
   // const addQuestionDiv = () => {  
@@ -139,6 +139,17 @@ function CreateForm() {
   const onNavigatorCLickHandler = (index) => {
     setActiveNav(index);
   };
+
+  const onSaveButtonClick = () => {
+    questionDivs.forEach((questionId) => {
+      const divElement = React.querySelector(`div[key="${questionId}"]`);
+      const inputElements = divElement.querySelectorAll("input");
+    
+      inputElements.forEach((inputElement) => {
+        console.log(inputElement.value);
+      });
+    });
+  }
 
 
 
@@ -200,12 +211,12 @@ function CreateForm() {
        <div className="w-[100%] flex flex-col items-center justify-center" >
        {questionDivs.map((questionId, index) => (
         <div className="w-[40%] my-2" key={questionId} onClick={(event) => handleQuestionClick(event, index)}>
-          {<Questions />}
+          <Questions  />
         </div>
+
+
       ))}
       </div>
-  
-
         {/* Toolbar Div  */}
         {showToolbar && (
           <div
@@ -230,7 +241,9 @@ function CreateForm() {
           </div>
         )}
         </div>
+        <button className=" bg-ui-purple text-white px-7 py-2 rounded-md my-2" onClick={onSaveButtonClick}> Save </button>
       </div>
+     
     </div>
   );
 }

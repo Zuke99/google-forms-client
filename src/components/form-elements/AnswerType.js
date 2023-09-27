@@ -1,20 +1,33 @@
-
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, {  useState } from 'react'
+import React, {  useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { addQuestion } from '../../features/user/QuestionSlice';
 
 function AnswerType(props) {
     const [radioButtons, setRadioButtons] = useState(['Option 1']);
     const [counter, setCounter] = useState(1);
     const [textValues, setTextValues] = useState(['Option 1']);
+    const [allQuestion, setAllQuestions] = useState([]);
+
+    // useEffect = () => {
+    //   console.log("AnswersSet", allQuestion);
+    // }
+
+    const dispatch = useDispatch();
 
     const textOnChangeHandler = (index, newValue) => {
        const newTextValue = [...textValues];
        newTextValue[index] = newValue;
        setTextValues(newTextValue);
+       saveAnswers();
+
+       
 
     }
-    
+
+
+    //adding new RadioButton/Checkbox
     const addRadioButton = (index) => {
        
         if(index === radioButtons.length - 1){
@@ -43,6 +56,19 @@ function AnswerType(props) {
       console.log(textValues);
         }
     };
+
+
+    const saveAnswers = () => {
+      const data = {
+          type : props.type,
+          question : props.question,
+          options : textValues
+      }
+      setAllQuestions([...allQuestion, data]);
+      console.log("All Question",allQuestion)
+      dispatch(addQuestion(allQuestion));
+
+  }
    
   
     // const removeRadioButton = async(radioButton, index, textValue) => {
