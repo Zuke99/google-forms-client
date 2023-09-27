@@ -1,20 +1,33 @@
-
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, {  useState } from 'react'
+import React, {  useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { addQuestion } from '../../features/user/QuestionSlice';
 
 function AnswerType(props) {
     const [radioButtons, setRadioButtons] = useState(['Option 1']);
     const [counter, setCounter] = useState(1);
     const [textValues, setTextValues] = useState(['Option 1']);
+    const [allQuestion, setAllQuestions] = useState([]);
+
+    // useEffect = () => {
+    //   console.log("AnswersSet", allQuestion);
+    // }
+
+    const dispatch = useDispatch();
 
     const textOnChangeHandler = (index, newValue) => {
        const newTextValue = [...textValues];
        newTextValue[index] = newValue;
        setTextValues(newTextValue);
+       saveAnswers();
+
+       
 
     }
-    
+
+
+    //adding new RadioButton/Checkbox
     const addRadioButton = (index) => {
        
         if(index === radioButtons.length - 1){
@@ -42,32 +55,32 @@ function AnswerType(props) {
       console.log(radioButtons);
       console.log(textValues);
         }
+        saveAnswers();
+
     };
-   
-  
-    // const removeRadioButton = async(radioButton, index, textValue) => {
-    //   console.log("Radiobutton", radioButton);
-    //   console.log("index", index);
-    //   console.log("Before TextVAklues",textValues);
-    //   console.log("Before Radio ButtonsS", radioButtons);
-    //   console.log("element to be removed", radioButtons[index]);
-    //   console.log("Text to be removed", textValues[index]);
-    //   // const updatedRadioButtons = await radioButtons.filter((rb) => rb !== radioButton);
-    //   // setRadioButtons(updatedRadioButtons);
-    //   setRadioButtons(async (prevRadioButtons) => 
-    //    await prevRadioButtons.filter((rb)  => rb !== radioButton)
-    // );
-  
 
 
-    //   // const updateTextBox = await textValues.filter((text) => text !== textValue);
-    //   // setTextValues(updateTextBox);
+    const saveAnswers = () => {
 
-    //   setTextValues((prevTextValues) => prevTextValues.filter((text) => text !== textValue));
+      const data = {
+          type : props.type,
+          question : props.question,
+          options : textValues
+      }
+     
+      setAllQuestions(data);
+      let display = JSON.parse(localStorage.getItem("questionSets")) || [];
+      console.log("propIndex", props.index);
+      display.splice(props.index, 1 , data);
+      localStorage.setItem("questionSets",JSON.stringify(display));
 
-    //   // console.log("Updated Radio ButtonsS", radioButtons);
-    //   // console.log("Updated TextValues",textValues);
-    // };
+      //console.log("display", JSON.parse(display));
+      //localStorage.setItem("questionSets",JSON.stringify(data));
+      //console.log("All Question",allQuestion)
+     // dispatch(addQuestion(allQuestion));
+
+  }
+
     
     
 
