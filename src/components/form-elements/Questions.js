@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState } from 'react'
 import AnswerType from './AnswerType'
 
-    function Questions() {
+    function Questions(props) {
         const [answerType, setAnswerType] = useState("radio");
         const [question, setQuestion] = useState("");
 
@@ -21,10 +21,19 @@ import AnswerType from './AnswerType'
         } else {
             setAnswerType('textarea')
         }
+        saveAnswers();
         }
 
         const questionOnChangeHandler = (e) => {
             setQuestion(e.target.value);
+            saveAnswers();
+            
+        }
+        const saveAnswers = () => {
+            const localStorageQuestions = JSON.parse(localStorage.getItem("questionSets"));
+            localStorageQuestions[props.index].question = question;
+            localStorageQuestions[props.index].type = answerType;
+            localStorage.setItem("questionSets", JSON.stringify(localStorageQuestions));
         }
 
 
@@ -55,7 +64,7 @@ import AnswerType from './AnswerType'
 
         {/* options and answers */}
         <div className='h-[40%] w-[100%] '>
-            <AnswerType type={answerType} question={question}/>
+            <AnswerType type={answerType} question={question} index = {props.index}/>
         </div>
 
         {/* Footer to copy delete dv */}

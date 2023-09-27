@@ -102,8 +102,29 @@ function CreateForm() {
       {<Questions />}
       </div>);
 
+      //if the page renders for first time
+      if(selectedDivIndex === -1){
+        localStorage.removeItem("questionSets");
+      }
 
     newQuestionDivs.splice(selectedDivIndex + 1, 0, newKey);
+
+
+    let localStorageQuestions = JSON.parse(localStorage.getItem("questionSets")) || [];
+    console.log("from LocalStorage", localStorageQuestions);
+    if (!Array.isArray(localStorageQuestions)) {
+      localStorageQuestions = [];
+    }
+    const data = {
+      type: "",
+      question: "",
+      options: []
+    };
+
+    localStorageQuestions.splice(selectedDivIndex + 1, 0, data);
+    console.log("loclstorage after splice", localStorageQuestions);
+    console.log("InsertAt", selectedDivIndex + 1);
+    localStorage.setItem("questionSets",JSON.stringify(localStorageQuestions)); 
 
 
     setQuestionDivs(newQuestionDivs);
@@ -211,7 +232,7 @@ function CreateForm() {
        <div className="w-[100%] flex flex-col items-center justify-center" >
        {questionDivs.map((questionId, index) => (
         <div className="w-[40%] my-2" key={questionId} onClick={(event) => handleQuestionClick(event, index)}>
-          <Questions  />
+          <Questions index={index}/>
         </div>
 
 

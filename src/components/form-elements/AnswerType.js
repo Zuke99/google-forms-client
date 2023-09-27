@@ -55,45 +55,32 @@ function AnswerType(props) {
       console.log(radioButtons);
       console.log(textValues);
         }
+        saveAnswers();
+
     };
 
 
     const saveAnswers = () => {
+
       const data = {
           type : props.type,
           question : props.question,
           options : textValues
       }
-      setAllQuestions([...allQuestion, data]);
-      console.log("All Question",allQuestion)
-      dispatch(addQuestion(allQuestion));
+     
+      setAllQuestions(data);
+      let display = JSON.parse(localStorage.getItem("questionSets")) || [];
+      console.log("propIndex", props.index);
+      display.splice(props.index, 1 , data);
+      localStorage.setItem("questionSets",JSON.stringify(display));
+
+      //console.log("display", JSON.parse(display));
+      //localStorage.setItem("questionSets",JSON.stringify(data));
+      //console.log("All Question",allQuestion)
+     // dispatch(addQuestion(allQuestion));
 
   }
-   
-  
-    // const removeRadioButton = async(radioButton, index, textValue) => {
-    //   console.log("Radiobutton", radioButton);
-    //   console.log("index", index);
-    //   console.log("Before TextVAklues",textValues);
-    //   console.log("Before Radio ButtonsS", radioButtons);
-    //   console.log("element to be removed", radioButtons[index]);
-    //   console.log("Text to be removed", textValues[index]);
-    //   // const updatedRadioButtons = await radioButtons.filter((rb) => rb !== radioButton);
-    //   // setRadioButtons(updatedRadioButtons);
-    //   setRadioButtons(async (prevRadioButtons) => 
-    //    await prevRadioButtons.filter((rb)  => rb !== radioButton)
-    // );
-  
 
-
-    //   // const updateTextBox = await textValues.filter((text) => text !== textValue);
-    //   // setTextValues(updateTextBox);
-
-    //   setTextValues((prevTextValues) => prevTextValues.filter((text) => text !== textValue));
-
-    //   // console.log("Updated Radio ButtonsS", radioButtons);
-    //   // console.log("Updated TextValues",textValues);
-    // };
     
     
 

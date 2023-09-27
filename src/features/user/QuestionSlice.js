@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+
 export const addQuestion  = createAsyncThunk("addQuestion", async (data , {rejectWithValue}) => {
     try{
         return data;
@@ -7,32 +8,32 @@ export const addQuestion  = createAsyncThunk("addQuestion", async (data , {rejec
         return rejectWithValue(error);
     }
 });
+const initialState = {
+    questionSet : {},
+    isLoading : false,
+    error : false,
+}
 
 const question = createSlice({
     name : "question",
-    initialState : {
-        questionSet : {},
-        isLoading : false,
-        error : false,
+    initialState : initialState,
+    reducers:{
+        resetQuestionState: (state) => {
+            state.questionSet = {};
+            state.isLoading = false;
+            state.error = false;
+            return initialState;
+        }
     },
     extraReducers : (builder) => {
-        builder.addCase(addQuestion.pending, (state, action) => {
+        builder.addCase(addQuestion.pending, (state) => {
             state.isLoading = true;
         })
 
         builder.addCase(addQuestion.fulfilled, (state, action) => {
 
             state.isLoading = false;
-            const { type, question, options } = action.payload;
-
-            // Check if the question text already exists in the state
-            if (state.questionSet[question]) {
-              // If it exists, update it
-              state.questionSet[question] = action.payload
-            } else {
-              // Otherwise, add it as a new question
-              state.questionSet[question] = action.payload
-            }
+            state.questionSet = action.payload;
           });
         
 

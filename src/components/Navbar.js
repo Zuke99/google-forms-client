@@ -13,7 +13,6 @@ function Navbar(props) {
 
     useEffect(() => {
         const imageUrl = image;
-    
         fetch(imageUrl)
           .then((response) => response.blob())
           .then((blob) => {
